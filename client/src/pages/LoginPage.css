@@ -1,0 +1,137 @@
+/* ======= Biến màu giống HomePage ======= */
+:root {
+  --bg: #f4f4f2;
+  --text: #2e2e2e;
+  --primary: #4266cc;
+  --card-border: #8e8cb4;
+  --card-bg: #ffffff;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ======= Layout full trang ======= */
+.login-page {
+  background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1470&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ======= Khung đăng nhập ======= */
+.login-box {
+  background-color: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  width: 360px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+/* ======= Tiêu đề & mô tả ======= */
+.logo-text {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: var(--primary);
+  text-align: center;
+}
+
+.subtext {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ======= Nhóm input ======= */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background-color: #f8f8f8;
+  color: #111;
+  font-size: 15px;
+  transition: border 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: var(--primary);
+}
+
+/* ======= Nút đăng nhập ======= */
+.login-btn {
+  margin-top: 10px;
+  width: 100%;
+  background-color: var(--primary);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #3657b7;
+}
+
+/* ======= Responsive ======= */
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 30px 20px;
+  }
+}
+
+.password-group {
+  position: relative;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* chừa chỗ cho icon mắt */
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+
