@@ -1,26 +1,30 @@
-// server/db.js
+// db.js
 const sql = require('mssql');
 
 const config = {
-    user: 'phuc',         // ví dụ: 'sa'
-    password: '123',          // ví dụ: '123456'
-    server: 'LAPTOP-JISSCJN5',               // hoặc 'DESKTOP\\SQLEXPRESS'
-    database: 'ToChucThiChungChi',       // tên database mà bé đã tạo
-    options: {
-      encrypt: false, // dùng true nếu dùng Azure
-      enableArithAbort: true,
-      trustServerCertificate: true,
-    },
-  };
+  user: 'sa',
+  password: 'svcntt@123456',
+  server: 'localhost',
+  port: 1433,
+  database: 'ACCI_DB',
+  options: {
+    encrypt: false,
+    trustServerCertificate: true
+  }
+};
+
 
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
   .then(pool => {
-    console.log('✅ Kết nối SQL Server thành công');
+    console.log('✅ Kết nối SQL Server thành công d');
     return pool;
   })
-  .catch(err => console.log('❌ Kết nối thất bại:', err));
+  .catch(err => {
+    console.log('❌ Kết nối thất bại d:', err);
+  });
 
 module.exports = {
-  sql, poolPromise
+  sql,
+  poolPromise,
 };
