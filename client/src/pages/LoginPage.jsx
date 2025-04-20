@@ -4,10 +4,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import WarningModal from '../components/WarningModal';
 
-
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [maNhanVien, setMaNhanVien] = useState('');
+  const [matKhau, setMatKhau] = useState('');  
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showWrongModal, setShowWrongModal] = useState(false);
@@ -15,29 +14,52 @@ function LoginPage() {
   const handleLogin = async () => {
     try {
       const res = await axios.post('http://localhost:5000/api/login', {
-        email,
-        password,
+        maNhanVien,
+        matKhau,
       });
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      navigate('/home');
+
+      const user = res.data.user;
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Điều hướng theo vai trò
+      switch (user.vaiTro) {
+        case 'Tiếp nhận':
+          navigate('/tiepnhan');
+          break;
+        case 'Kế toán':
+          navigate('/ketoan');
+          break;
+        case 'Tổ chức thi':
+          navigate('/tochucthi');
+          break;
+        case 'Nhập liệu':
+          navigate('/nhaplieu');
+          break;
+        case 'Coi thi':
+          navigate('/coithi');
+          break;
+        default:
+          alert('Vai trò không xác định!');
+          break;
+      }
     } catch {
       setShowWrongModal(true);
     }
-  }       
+  };
 
   return (
     <div className="login-page">
       <div className="login-box">
         <h1 className="logo-text">ACCI Center</h1>
-        <p className="subtext">Đăng nhập vào hệ thống quản lý chứng chỉ</p>
+        <p className="subtext">Đăng nhập vào hệ thống ACCI</p>
 
         <div className="form-group">
-          <label>Email</label>
+          <label>Mã nhân viên</label>
           <input
             type="text"
-            placeholder="Nhập email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Nhập mã nhân viên"
+            value={maNhanVien}
+            onChange={(e) => setMaNhanVien(e.target.value.trim())}
           />
         </div>
 
@@ -47,12 +69,11 @@ function LoginPage() {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Nhập mật khẩu"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={matKhau}
+              onChange={(e) => setMatKhau(e.target.value)}
             />
             <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
-                // 👁️ Mắt mở
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#777" viewBox="0 0 24 24">
                   <path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 
                   12c-2.76 0-5-2.24-5-5s2.24-5 5-5 
@@ -61,7 +82,6 @@ function LoginPage() {
                   3-1.34 3-3-1.34-3-3-3z"/>
                 </svg>
               ) : (
-                // 🙈 Mắt nhắm
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#bbb" viewBox="0 0 24 24">
                   <path d="M12 6a9.77 9.77 0 0 1 8.94 6A9.77 9.77 0 0 1 12 18a9.77 
                   9.77 0 0 1-8.94-6A9.77 9.77 0 0 1 12 6m0-2C5 
@@ -78,10 +98,12 @@ function LoginPage() {
             </span>
           </div>
         </div>
+
         <button className="login-btn" onClick={handleLogin}>
           Đăng nhập
         </button>
       </div>
+
       {showWrongModal && (
         <WarningModal
           message="Sai tài khoản hoặc mật khẩu!"
