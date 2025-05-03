@@ -87,14 +87,14 @@ const AccountantPage = () => {
                   <td>
                   {row.TrangThai === 'Đang xử lý' && (
                     <button
-                    className="btn btn-xuly"
-                    onClick={() => {
-                      console.log('➡️ Chuyển đến:', row.MaPDK);
-                      navigate(`/ketoan/xuly/${row.MaPDK}`);
-                    }}
-                  >
-                    Xử lý
-                  </button>                  
+                        className={`btn ${row.DaXuLy ? 'btn-capnhat' : 'btn-xuly'}`}
+                        onClick={() => {
+                        console.log('➡️ Chuyển đến:', row.MaPDK);
+                        navigate(`/ketoan/xuly/${row.MaPDK}`);
+                        }}
+                    >
+                        {row.DaXuLy ? 'Cập nhật' : 'Xử lý'}
+                    </button>
                     )}
                   </td>
                 </tr>
