@@ -7,7 +7,14 @@ router.get('/', async (req, res) => {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-      SELECT p.MaPhieuDuThi, p.MaThiSinh, c.TenChungChi, p.TrangThaiPhieu, p.SoLanGiaHanConLai
+      SELECT 
+        p.MaPhieuDuThi,
+        p.MaThiSinh,
+        c.TenChungChi,
+        p.TrangThaiPhieu,
+        p.SoLanGiaHanConLai,
+        CONVERT(varchar(10), p.NgayThi, 120) AS NgayThi,
+        CONVERT(varchar(8), p.GioThi, 108) AS GioThi        
       FROM PhieuDuThi p
       JOIN ChungChi c ON p.MaChungChi = c.MaChungChi
     `);

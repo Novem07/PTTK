@@ -14,6 +14,7 @@ import RenewRegisterPage from './pages/RenewRegisterPage';
 import AccountantPage from './pages/AccountantPage';
 import ProcessRegister from './pages/ProcessRegister';
 import ViewTempThisinh from './pages/ViewTempThisinh';
+import ExtendFormPage from './pages/ExtendFormPage';
 
 // Dummy pages cho các vai trò
 //const TiepNhanPage = () => <h2>Trang Tiếp nhận</h2>;
@@ -51,6 +52,7 @@ function App() {
         <Route path="/giahan" element={<ExtendRegisterPage />} />
         <Route path="/giahan/:maPhieu" element={<RenewRegisterPage />} />
         <Route path="/xemthisinh" element={<ViewTempThisinh />} />
+        <Route path="/giahan/create/:maPhieu" element={<RequireAuth><ExtendFormPage /></RequireAuth>} />
         {/* Nếu route không khớp, về trang login */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

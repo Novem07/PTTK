@@ -28,6 +28,11 @@ app.use('/api/khachhang', require('./routes/khachhang'));
 const chungchiRoutes = require('./routes/chungchi');
 app.use('/api/chungchi', chungchiRoutes);
 
+const phieuDangKyGiaHanRoutes = require('./routes/phieudangkygiahan');
+app.use('/api/phieudangkygiahan', phieuDangKyGiaHanRoutes);
+
+const lichthiRoutes = require('./routes/lichthi');
+app.use('/api/lichthi', lichthiRoutes);
 
 app.listen(5000, () => {
   console.log('Backend chạy tại http://localhost:5000');
