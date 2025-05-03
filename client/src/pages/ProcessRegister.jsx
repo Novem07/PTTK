@@ -41,6 +41,9 @@ const ProcessRegister = () => {
         const formattedDate = today.toLocaleDateString('vi-VN'); // ra định dạng dd/mm/yyyy
         setNgayLap(formattedDate);
 
+        const tongTruocTroGia = (data.TongTien || 0) + (data.TroGia || 0);
+        setPhieu({ ...data, TongTruocTroGia: tongTruocTroGia });
+
       })
       .catch(err => {
         console.error('❌ Lỗi khi truy vấn phiếu:', err);
@@ -48,18 +51,34 @@ const ProcessRegister = () => {
       });
   }, [maPDK]);
 
+    fetch(`http://localhost:5000/api/payments/tinhtoan/${maPDK}`)
+    .then(res => res.json())
+    .then(data => {
+        setPhieu(prev => ({
+        ...prev,
+        TongTruocTroGia: data.Tong,
+        TroGia: data.TroGia,
+        TongTien: data.TongTien
+        }));
+    })
+    .catch(err => console.error('❌ Lỗi khi tính hóa đơn:', err));
+
   const handleHuyPhieu = () => {
     navigate('/ketoan');
   };
 
   const handleTiepTuc = () => {
-    if (khachHang.LaDonVi || daThanhToan) {
-      alert('✅ Phiếu đã được xử lý thành công!');
+    if (khachHang.LaDonVi && !daThanhToan) {
+      // Lưu cờ đã xử lý vào localStorage
+      localStorage.setItem(`processed_${maPDK}`, true);
+      alert('✅ Phiếu đã được xử lý (chưa thanh toán).');
       navigate('/ketoan');
-    } else {
+    } else if (daThanhToan) {
+      // xử lý thanh toán bình thường (nếu có)
+      alert('✅ Đã xác nhận thanh toán!');
       navigate('/ketoan');
     }
-  };
+  };  
 
   const handleLogoutConfirm = () => {
     localStorage.removeItem('user');
@@ -94,10 +113,10 @@ const ProcessRegister = () => {
           <p><span>Họ tên khách hàng:</span><span>{khachHang.HoTen}</span></p>
           <p><span>Số điện thoại khách hàng:</span><span>{khachHang.SDT}</span></p>
           <p><span>Đơn vị:</span><span>{khachHang.LaDonVi ? 'Có' : 'Không'}</span></p>
-          <p><span>Tổng:</span><span>300000 VND</span></p>
-          <p><span>Trợ giá:</span><span>0</span></p>
+          <p><span>Tổng:</span><span>{phieu.TongTruocTroGia?.toLocaleString()} VND</span></p>
+          <p><span>Trợ giá:</span><span>{phieu.TroGia?.toLocaleString()} VND</span></p>
           <hr />
-          <p><span>Tổng tiền:</span><span>300000 VND</span></p>
+          <p><span>Tổng tiền:</span><span>{phieu.TongTien?.toLocaleString()} VND</span></p>
           <p>
             <span>Phương thức thanh toán:</span>
             <span>

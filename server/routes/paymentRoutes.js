@@ -6,14 +6,21 @@ router.get('/', async (req, res) => {
   try {
     const pool = await poolPromise;
     const result = await pool.request().query(`
-      SELECT 
-        MaPhieuDangKy AS MaPDK, 
-        MaKhachHang AS MaKH,
-        MaThanhToan AS MaTT,
-        FORMAT(NgayDangKy, 'dd/MM/yyyy') AS NgayDK,
-        TrangThaiPhieu AS TrangThai
-      FROM PhieuDangKy
-    `);
+        SELECT 
+          pd.MaPhieuDangKy AS MaPDK, 
+          pd.MaKhachHang AS MaKH,
+          pd.MaThanhToan AS MaTT,
+          FORMAT(pd.NgayDangKy, 'dd/MM/yyyy') AS NgayDK,
+          pd.TrangThaiPhieu AS TrangThai,
+          kh.DonVi,
+          CASE 
+            WHEN kh.DonVi != N'Không' AND hd.MaHoaDon IS NOT NULL THEN 1
+            ELSE 0
+          END AS DaXuLy
+        FROM PhieuDangKy pd
+        JOIN KhachHang kh ON pd.MaKhachHang = kh.MaKhachHang
+        LEFT JOIN HoaDonDangKy hd ON pd.MaPhieuDangKy = hd.MaPhieuDangKy
+      `);      
     res.status(200).json(result.recordset);
   } catch (err) {
     console.error('❌ Lỗi khi truy vấn payments:', err);
@@ -86,5 +93,45 @@ router.get('/phieu/:id', async (req, res) => {
     }
   });
   
+  router.get('/tinhtoan/:maPDK', async (req, res) => {
+    const { maPDK } = req.params;
+  
+    try {
+      const pool = await poolPromise;
+      const result = await pool.request()
+        .input('MaPDK', sql.VarChar, maPDK)
+        .query(`
+          SELECT 
+            SUM(CC.Gia) AS Tong, 
+            COUNT(PDT.MaPhieuDuThi) AS SoLuong,
+            CASE 
+              WHEN KH.DonVi = N'Không' THEN 0
+              WHEN COUNT(PDT.MaPhieuDuThi) > 20 THEN ROUND(SUM(CC.Gia) * 0.15, 2)
+              ELSE ROUND(SUM(CC.Gia) * 0.10, 2)
+            END AS TroGia,
+            SUM(CC.Gia) -
+            CASE 
+              WHEN KH.DonVi = N'Không' THEN 0
+              WHEN COUNT(PDT.MaPhieuDuThi) > 20 THEN ROUND(SUM(CC.Gia) * 0.15, 2)
+              ELSE ROUND(SUM(CC.Gia) * 0.10, 2)
+            END AS TongTien
+          FROM PhieuDangKy PDK
+          JOIN KhachHang KH ON PDK.MaKhachHang = KH.MaKhachHang
+          JOIN PhieuDuThi PDT ON PDT.MaPhieuDangKy = PDK.MaPhieuDangKy
+          JOIN ChungChi CC ON PDT.MaChungChi = CC.MaChungChi
+          WHERE PDK.MaPhieuDangKy = @MaPDK
+          GROUP BY KH.DonVi
+        `);
+  
+      if (result.recordset.length === 0) {
+        return res.status(404).json({ message: 'Không tính được giá trị hóa đơn' });
+      }
+  
+      res.status(200).json(result.recordset[0]);
+    } catch (err) {
+      console.error('❌ Lỗi khi tính toán hóa đơn:', err);
+      res.status(500).json({ message: 'Lỗi server khi tính toán hóa đơn' });
+    }
+  });  
 
 module.exports = router;
