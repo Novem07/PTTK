@@ -34,6 +34,7 @@ router.get('/phieu/:id', async (req, res) => {
             pd.MaKhachHang AS MaKH,
             kh.HoTen,
             kh.SDT,
+            kh.DonVi,
             pd.MaThanhToan AS MaTT,
             FORMAT(pd.NgayDangKy, 'dd/MM/yyyy') AS NgayDK,
             pd.TrangThaiPhieu AS TrangThai,
@@ -65,12 +66,14 @@ router.get('/phieu/:id', async (req, res) => {
     try {
       const pool = await poolPromise;
       const result = await pool.request()
-        .input('MaKH', sql.VarChar, id)
+        .input('MaPDK', sql.VarChar, maPDK)
         .query(`
-          SELECT MaKhachHang AS MaKH, HoTen, SDT, DonVi
-          FROM KhachHang
-          WHERE MaKhachHang = @MaKH
+            SELECT P.*, KH.HoTen, KH.SDT, KH.DonVi
+            FROM PhieuDangKy P
+            JOIN KhachHang KH ON KH.MaKhachHang = P.MaKhachHang
+            WHERE P.MaPDK = @MaPDK
         `);
+
   
       if (result.recordset.length === 0) {
         return res.status(404).json({ message: 'Không tìm thấy khách hàng' });

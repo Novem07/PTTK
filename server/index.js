@@ -23,8 +23,10 @@ app.use('/api/thisinh', thisinhRoutes);
 const phieuduthiRoutes = require('./routes/phieuduthi');
 app.use('/api/phieuduthi', phieuduthiRoutes);
 
-const phieuduthiRouter = require('./routes/phieuduthi');
-app.use('/api', phieuduthiRouter);
+app.use('/api/khachhang', require('./routes/khachhang'));
+
+const chungchiRoutes = require('./routes/chungchi');
+app.use('/api/chungchi', chungchiRoutes);
 
 
 app.listen(5000, () => {
