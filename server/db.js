@@ -2,10 +2,10 @@
 const sql = require('mssql');
 
 const config = {
-    user: 'huhu',         // ví dụ: 'sa'
+    user: 'phuc',         // ví dụ: 'sa'
     password: '123',          // ví dụ: '123456'
-    server: 'ALTHEA',               // hoặc 'DESKTOP\\SQLEXPRESS'
-    database: 'ACCI_DB',       // tên database mà bé đã tạo
+    server: 'LAPTOP-JISSCJN5',               // hoặc 'DESKTOP\\SQLEXPRESS'
+    database: 'ACCI_DB1',       // tên database mà bé đã tạo
     options: {
       encrypt: false, // dùng true nếu dùng Azure
       enableArithAbort: true,
