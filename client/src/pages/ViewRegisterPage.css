@@ -48,3 +48,11 @@
     background-color: #e0a800;
   }
   
+  .nav-links .clickable {
+    cursor: pointer;
+    color: #000;
+  }
+  .nav-links .clickable:hover {
+    text-decoration: underline;
+  }
+  
