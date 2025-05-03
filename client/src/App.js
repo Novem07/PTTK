@@ -11,10 +11,12 @@ import ViewExamForms from './pages/ViewExamForms';
 import ExamFormDetail from './pages/ExamFormDetail';
 import ExtendRegisterPage from './pages/ExtendRegisterPage';
 import RenewRegisterPage from './pages/RenewRegisterPage';
+import AccountantPage from './pages/AccountantPage';
+import ProcessRegister from './pages/ProcessRegister';
 
 // Dummy pages cho các vai trò
 //const TiepNhanPage = () => <h2>Trang Tiếp nhận</h2>;
-const KeToanPage = () => <h2>Trang Kế toán</h2>;
+//const KeToanPage = () => <h2>Trang Kế toán</h2>;
 const ToChucThiPage = () => <h2>Trang Tổ chức thi</h2>;
 const NhapLieuPage = () => <h2>Trang Nhập liệu</h2>;
 const CoiThiPage = () => <h2>Trang Coi thi</h2>;
@@ -35,7 +37,7 @@ function App() {
 
         {/* Route chia theo vai trò */}
         <Route path="/tiepnhan" element={<ViewRegisterPage />} />
-        <Route path="/ketoan" element={<RequireAuth><KeToanPage /></RequireAuth>} />
+        <Route path="/ketoan" element={<RequireAuth><AccountantPage /></RequireAuth>} />
         <Route path="/tochucthi" element={<RequireAuth><ToChucThiPage /></RequireAuth>} />
         <Route path="/nhaplieu" element={<RequireAuth><NhapLieuPage /></RequireAuth>} />
         <Route path="/coithi" element={<RequireAuth><CoiThiPage /></RequireAuth>} />
@@ -44,6 +46,7 @@ function App() {
         <Route path="/xemthisinh" element={<ViewStudentListPage />} />
         <Route path="/phieuduthi" element={<ViewExamForms />} />
         <Route path="/phieuduthi/:id" element={<ExamFormDetail />} />
+        <Route path="/ketoan/xuly/:maPDK" element={<RequireAuth><ProcessRegister /></RequireAuth>} />
         <Route path="/giahan" element={<ExtendRegisterPage />} />
         <Route path="/giahan/:maPhieu" element={<RenewRegisterPage />} />
         {/* Nếu route không khớp, về trang login */}
